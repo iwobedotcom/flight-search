@@ -1,17 +1,12 @@
 import axios from "axios";
 
-export async function fetchFlights(params: {
-  origin: string;
-  destination: string;
-  departureDate: string;
-}) {
-  const res = await axios.get("/api/flights", {
-    params: {
-      origin: params.origin,
-      destination: params.destination,
-      departureDate: params.departureDate,
-    },
-  });
+export async function fetchFlights(params: Record<string, string>) {
+  const query = new URLSearchParams(params).toString();
 
-  return res.data;
+  try {
+    const res = await axios.get(`/api/flights?${query}`);
+    return res.data;
+  } catch (error) {
+    throw new Error("Failed to fetch flights");
+  }
 }

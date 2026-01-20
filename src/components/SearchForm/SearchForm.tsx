@@ -18,9 +18,13 @@ export default function SearchForm({ onSearch }: Props) {
   const handleChange =
     (field: keyof SearchParams) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      let value = event.target.value;
+      if (field === "origin" || field === "destination") {
+        value = value.toUpperCase().slice(0, 3);
+      }
       setForm({
         ...form,
-        [field]: event.target.value,
+        [field]: value,
       });
     };
 
@@ -39,7 +43,9 @@ export default function SearchForm({ onSearch }: Props) {
         label="From"
         value={form.origin}
         onChange={handleChange("origin")}
-        placeholder="e.g. Lagos"
+        placeholder="e.g. LOS"
+        helperText="3-letter IATA code"
+        inputProps={{ maxLength: 3 }}
         fullWidth
       />
 
@@ -47,7 +53,9 @@ export default function SearchForm({ onSearch }: Props) {
         label="To"
         value={form.destination}
         onChange={handleChange("destination")}
-        placeholder="e.g. New York"
+        placeholder="e.g. JFK"
+        helperText="3-letter IATA code"
+        inputProps={{ maxLength: 3 }}
         fullWidth
       />
 

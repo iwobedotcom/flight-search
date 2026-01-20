@@ -1,46 +1,130 @@
-import { Container, Box } from "@mui/material";
-import { useState } from "react";
+import {
+  Container,
+  Box,
+  Grid,
+  Typography,
+  Button,
+  Tooltip,
+  useTheme,
+} from "@mui/material";
+import { useMemo, useState } from "react";
 import SearchForm from "../components/SearchForm";
 import type { SearchParams } from "../types/search";
 import { useFlights } from "../hooks/useFlights";
 import { FlightGrid } from "../components/FlightResults/FlightGrid";
 import { useFlightFilters } from "../hooks/useFlightFilter";
 import { FlightFilters } from "../components/FlightFilters";
-import { PriceGraph } from "../components/PriceGraph";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 
 export default function Home() {
+  const theme = useTheme();
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
 
   const { data = [], isLoading } = useFlights(searchParams);
-  console.log("🚀 ~ Home ~ data:", JSON.stringify(data, null, 2));
 
   const { filters, setFilters, filteredRows } = useFlightFilters(data);
 
-  if (isLoading) return <LoadingSkeleton />;
+  const airlinesFromData = useMemo(() => {
+    const map = new Map<string, string>();
 
-  // if (filteredRows.length === 0) {
-  //   return <EmptyState />;
-  // }
+    data.forEach((row) => {
+      if (!map.has(row.airlineCode)) {
+        map.set(row.airlineCode, row.airlineName);
+      }
+    });
+
+    return Array.from(map, ([code, name]) => ({
+      code,
+      name,
+    }));
+  }, [data]);
+
+  const cabinOptions = useMemo(() => {
+    const set = new Set<string>();
+
+    data.forEach((row) => {
+      row.cabinClasses.forEach((cabin) => set.add(cabin));
+    });
+
+    return Array.from(set);
+  }, [data]);
 
   return (
     <Container maxWidth="xl">
       <Box my={4}>
-        <SearchForm onSearch={setSearchParams} />
+        <SearchForm onSearch={setSearchParams} isLoading={isLoading} />
       </Box>
 
-      <PriceGraph rows={filteredRows} />
+      {isLoading ? (
+        <LoadingSkeleton />
+      ) : (
+        <>
+          <Grid container spacing={2}>
+            <Grid
+              size={{ xs: 12, md: 3 }}
+              sx={{
+                backgroundColor: "background.paper",
+                p: 2,
+                borderRadius: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 2,
+                }}
+              >
+                <Typography variant="h6">Flight Filters</Typography>
 
-      <FlightFilters
-        maxPrice={filters.maxPrice ?? 1000}
-        selectedStops={filters.stops ?? []}
-        onPriceChange={(value) =>
-          setFilters((f) => ({ ...f, maxPrice: value }))
-        }
-        onStopsChange={(stops) => setFilters((f) => ({ ...f, stops }))}
-      />
+                {/* Reset Button */}
+                <Tooltip title="Reset">
+                  <Button
+                    sx={{
+                      color: theme.palette.text.secondary,
+                    }}
+                    onClick={() => setFilters({})}
+                  >
+                    Reset
+                  </Button>
+                </Tooltip>
+              </Box>
+              {/* <PriceGraph rows={filteredRows} /> */}
 
-      <FlightGrid rows={filteredRows} loading={isLoading} />
+              <FlightFilters
+                maxPrice={filters.maxPrice ?? 1000}
+                selectedStops={filters.stops ?? []}
+                selectedAirlines={filters.airlines ?? []}
+                selectedCabins={filters.cabinClasses ?? []}
+                airlines={airlinesFromData}
+                cabins={cabinOptions ?? []}
+                onPriceChange={(v) =>
+                  setFilters((f) => ({ ...f, maxPrice: v }))
+                }
+                onStopsChange={(v) => setFilters((f) => ({ ...f, stops: v }))}
+                onAirlinesChange={(v) =>
+                  setFilters((f) => ({ ...f, airlines: v }))
+                }
+                onCabinChange={(v) =>
+                  setFilters((f) => ({ ...f, cabinClasses: v }))
+                }
+              />
+            </Grid>
+
+            <Grid
+              size={{ xs: 12, md: 9 }}
+              sx={{
+                backgroundColor: "background.paper",
+                p: 2,
+                borderRadius: 2,
+              }}
+            >
+              <FlightGrid rows={filteredRows} loading={isLoading} />
+            </Grid>
+          </Grid>
+        </>
+      )}
     </Container>
   );
 }

@@ -3,11 +3,18 @@ import type { FlightFilters } from "../types/filters";
 import type { FlightRow } from "../types/flight";
 
 export function useFlightFilters(rows: FlightRow[]) {
-  const [filters, setFilters] = useState<FlightFilters>({});
+  const [filters, setFilters] = useState<FlightFilters>({
+    stops: [],
+    airlines: [],
+    cabinClasses: [],
+  });
 
   const filteredRows = useMemo(() => {
     return rows.filter((row) => {
       if (filters.maxPrice && row.price > filters.maxPrice) return false;
+
+      if (filters.stops?.length && !filters.stops.includes(row.stops))
+        return false;
 
       if (
         filters.airlines?.length &&
@@ -15,7 +22,10 @@ export function useFlightFilters(rows: FlightRow[]) {
       )
         return false;
 
-      if (filters.stops?.length && !filters.stops.includes(row.stops))
+      if (
+        filters.cabinClasses?.length &&
+        !filters.cabinClasses.some((cabin) => row.cabinClasses.includes(cabin))
+      )
         return false;
 
       return true;

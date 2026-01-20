@@ -1,13 +1,22 @@
 import dayjs from "dayjs";
 import { useState } from "react";
 import type { SearchParams } from "../types/search";
-import { Box, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  IconButton,
+  Tooltip,
+  CircularProgress,
+} from "@mui/material";
+import { SwapHoriz } from "@mui/icons-material";
 
 interface Props {
   onSearch: (params: SearchParams) => void;
+  isLoading: boolean;
 }
 
-export default function SearchForm({ onSearch }: Props) {
+export default function SearchForm({ onSearch, isLoading }: Props) {
   const [form, setForm] = useState<SearchParams>({
     origin: "",
     destination: "",
@@ -28,14 +37,27 @@ export default function SearchForm({ onSearch }: Props) {
       });
     };
 
+  const handleSwap = () => {
+    setForm({
+      ...form,
+      origin: form.destination,
+      destination: form.origin,
+    });
+  };
+
   const handleSubmit = () => onSearch(form);
 
   const isDisabled = !form.origin || !form.destination || !form.departureDate;
 
   return (
     <Box
+      sx={{
+        backgroundColor: "background.paper",
+        padding: 3,
+        borderRadius: 2,
+      }}
       display="grid"
-      gridTemplateColumns={{ xs: "1fr", md: "repeat(5, 1fr)" }}
+      gridTemplateColumns={{ xs: "1fr", md: "1fr auto 1fr 1fr 1fr 1fr" }}
       gap={2}
       alignItems="center"
     >
@@ -44,17 +66,32 @@ export default function SearchForm({ onSearch }: Props) {
         value={form.origin}
         onChange={handleChange("origin")}
         placeholder="e.g. LOS"
-        helperText="3-letter IATA code"
         inputProps={{ maxLength: 3 }}
         fullWidth
       />
+
+      <Tooltip title="Swap origin and destination">
+        <IconButton
+          onClick={handleSwap}
+          disabled={!form.origin && !form.destination}
+          sx={{
+            alignSelf: "center",
+            mt: { xs: 0, md: 1 },
+            color: "primary.main",
+            "&:hover": {
+              backgroundColor: "action.hover",
+            },
+          }}
+        >
+          <SwapHoriz />
+        </IconButton>
+      </Tooltip>
 
       <TextField
         label="To"
         value={form.destination}
         onChange={handleChange("destination")}
         placeholder="e.g. JFK"
-        helperText="3-letter IATA code"
         inputProps={{ maxLength: 3 }}
         fullWidth
       />
@@ -88,7 +125,7 @@ export default function SearchForm({ onSearch }: Props) {
         disabled={isDisabled}
         sx={{ height: "56px" }}
       >
-        Search
+        {isLoading ? <CircularProgress size={20} /> : "Search Flights"}
       </Button>
     </Box>
   );

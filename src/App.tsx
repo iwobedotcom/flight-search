@@ -95,9 +95,9 @@ function App() {
         palette: {
           mode: actualMode,
           primary: {
-            main: "#1976d2",
-            light: "#42a5f5",
-            dark: "#1565c0",
+            main: "#564efd",
+            light: "#b7b3ff",
+            dark: "##271bfe",
             contrastText: "#ffffff",
           },
           secondary: {
@@ -125,6 +125,15 @@ function App() {
             main: "#0288d1",
             light: "#03a9f4",
             dark: "#01579b",
+          },
+          background: {
+            default: "#f1f0f5",
+            paper: "#ffffff",
+          },
+          text: {
+            primary: "rgba(0, 0, 0, 1)",
+            secondary: "rgba(0, 0, 0, 0.6)",
+            disabled: "rgba(0, 0, 0, 0.3)",
           },
         },
         shadows: [

@@ -3,6 +3,7 @@ export interface FlightRow {
 
   airlineCode: string;
   airlineName: string;
+  cabinClasses: string[];
 
   flightNumber: string;
 

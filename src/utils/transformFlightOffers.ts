@@ -13,6 +13,17 @@ export function transformFlightOffers(
 
     const airlineCode = firstSegment.carrierCode;
 
+    // ✅ STEP 1: Extract cabin classes properly
+    const cabins = new Set<string>();
+
+    offer.travelerPricings?.forEach((tp: any) => {
+      tp.fareDetailsBySegment?.forEach((seg: any) => {
+        if (seg.cabin) {
+          cabins.add(seg.cabin);
+        }
+      });
+    });
+
     return {
       id: offer.id,
 
@@ -32,6 +43,9 @@ export function transformFlightOffers(
 
       price: Number(offer.price.grandTotal),
       currency: offer.price.currency,
+
+      // ✅ STEP 2: Normalize to array
+      cabinClasses: Array.from(cabins),
     };
   });
 }

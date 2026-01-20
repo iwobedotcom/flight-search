@@ -80,12 +80,12 @@ const Header: React.FC<HeaderProps> = ({ themeMode, onThemeModeChange }) => {
       color="default"
       elevation={1}
       sx={{
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.background.default,
         mb: 3,
         boxShadow: theme.shadows[1],
         backdropFilter: "blur(5px)",
         "-webkit-backdrop-filter": "blur(5px)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.3)",
+        borderBottom: `1px solid ${theme.palette.divider}`,
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
@@ -95,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({ themeMode, onThemeModeChange }) => {
             src={theme.palette.mode === "dark" ? logoWhite : logoBlack}
             alt="Flight Search"
             width="auto"
-            height={50}
+            height={45}
           />
         </Box>
 

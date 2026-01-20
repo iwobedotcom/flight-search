@@ -14,8 +14,15 @@ export function FlightGrid({ rows, loading }: Props) {
       columns={flightColumns}
       loading={loading}
       autoHeight
-      pageSizeOptions={[5, 10, 20]}
       disableRowSelectionOnClick
+      sx={{
+        "& .MuiDataGrid-columnHeaders": {
+          position: "sticky",
+          top: 0,
+          backgroundColor: "background.paper",
+          zIndex: 1,
+        },
+      }}
     />
   );
 }

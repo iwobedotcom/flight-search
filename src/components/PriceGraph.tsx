@@ -1,5 +1,5 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
-import type { FlightRow } from "../../types/flight";
+import type { FlightRow } from "../types/flight";
 
 export function PriceGraph({ rows }: { rows: FlightRow[] }) {
   return (

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { useState } from "react";
-import type { SearchParams } from "../../types/search";
+import type { SearchParams } from "../types/search";
 import { Box, Button, TextField } from "@mui/material";
 
 interface Props {

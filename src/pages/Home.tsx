@@ -14,11 +14,11 @@ import { useFlights } from "../hooks/useFlights";
 import { useFlightFilters } from "../hooks/useFlightFilter";
 import { FlightFilters } from "../components/FlightFilters";
 import { FlightsChips } from "../components/FlightsChips";
-import LoadingSkeleton from "../components/LoadingSkeleton";
 import { FlightTable } from "../components/Flights/FlightTable";
 import { clearStored, loadWithTTL, saveWithTTL } from "../utils/storage";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
+import FlightsSkeleton from "../components/FlightsSkeleton";
 
 export default function Home() {
   const theme = useTheme();
@@ -173,7 +173,7 @@ export default function Home() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 9 }}>
-          {isLoading && <LoadingSkeleton variant="table" count={1} />}
+          {isLoading && <FlightsSkeleton />}
 
           {!isLoading && isError && (
             <ErrorState

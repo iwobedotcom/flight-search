@@ -18,7 +18,7 @@ const FlightsSkeleton = () => {
       <TableContainer
         sx={{
           width: "100%",
-          overflowX: "hidden",
+          overflowX: { xs: "auto", md: "hidden" },
           backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
@@ -103,7 +103,7 @@ const FlightsSkeleton = () => {
                   }}
                 >
                   <Skeleton variant="circular" width={20} height={20} />
-                  <Skeleton variant="text" width={100} height={20} />
+                  <Skeleton variant="text" width={70} height={20} />
                 </Box>
               </TableCell>
             </TableRow>

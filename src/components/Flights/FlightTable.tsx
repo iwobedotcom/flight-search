@@ -187,8 +187,10 @@ export function FlightTable({ rows, loading }: Props) {
             borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
             borderRadius: 2,
             p: 1.2,
-            width: 500,
+            width: { xs: "90%", sm: 500 }, // <-- responsive: 90% on mobile, 500px on desktop
+            maxWidth: 500, // prevent growing beyond 500px
             mx: "auto",
+            flexWrap: "wrap", // allow content to wrap on small screens
           }}
         >
           <Typography variant="body2" color="text.secondary">

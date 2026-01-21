@@ -59,7 +59,7 @@ export function FlightFilters({
           size="small"
           value={maxPrice}
           min={100}
-          max={10000}
+          max={1000}
           step={10}
           onChange={(_, v) => onPriceChange(v as number)}
           valueLabelDisplay="auto"
@@ -77,7 +77,7 @@ export function FlightFilters({
             {formatPrice(100)}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            {formatPrice(10000)}
+            {formatPrice(1000)}
           </Typography>
         </Box>
       </Box>

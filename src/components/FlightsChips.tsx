@@ -1,7 +1,7 @@
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import type { FlightRow } from "../types/flight";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { FlightTakeoff } from "@mui/icons-material";
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 
 export function FlightsChips({ flights }: Props) {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Box>
@@ -21,10 +22,16 @@ export function FlightsChips({ flights }: Props) {
         Cheapest Flights
       </Typography>
 
-      <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={1}>
+      <Stack
+        direction="row"
+        spacing={isMobile ? 0 : 1}
+        flexWrap="wrap"
+        rowGap={isMobile ? 0 : 1}
+      >
         {flights.map((flight) => (
           <Chip
             key={flight.id}
+            size="small"
             label={
               <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                 <Typography

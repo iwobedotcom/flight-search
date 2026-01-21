@@ -42,7 +42,11 @@ export function FlightTableRow({ row }: Props) {
               alt={row.airlineName}
             />
             <Box>
-              <Typography variant="body2" lineHeight={0.7} fontWeight={600}>
+              <Typography
+                variant="body2"
+                sx={{ lineHeight: { xs: "initial", md: 0.7 } }}
+                fontWeight={600}
+              >
                 {row.airlineName}
               </Typography>
               <Typography variant="caption">{row.flightNumber}</Typography>

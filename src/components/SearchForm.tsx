@@ -105,7 +105,7 @@ export default function SearchForm({
         WebkitBackdropFilter: "blur(10px)",
         boxShadow: theme.shadows[1],
         borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
-        padding: 3,
+        padding: 2,
         borderRadius: 2,
       }}
       display="grid"
@@ -116,7 +116,7 @@ export default function SearchForm({
       {/* FROM + SWAP + TO - only flex on mobile */}
       <Box
         sx={{
-          display: { xs: "flex", md: "contents" }, // flex only on mobile
+          display: { xs: "flex", md: "contents" },
           alignItems: "center",
           gap: 1,
         }}
@@ -317,7 +317,7 @@ export default function SearchForm({
         size={isMobile ? "small" : "medium"}
         variant="contained"
         onClick={handleSubmit}
-        disabled={isDisabled}
+        disabled={isDisabled || isLoading}
         sx={{ height: { xs: "42px", md: "56px" } }}
       >
         {isLoading ? "Searching..." : "Search Flights"}

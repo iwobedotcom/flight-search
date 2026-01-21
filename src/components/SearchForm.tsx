@@ -7,10 +7,34 @@ import {
   TextField,
   IconButton,
   Tooltip,
+  Autocomplete,
   useTheme,
   useMediaQuery,
+  createFilterOptions,
+  Typography,
 } from "@mui/material";
 import { SwapHoriz } from "@mui/icons-material";
+import airportsData from "../data/airports.json";
+import { useMemo } from "react";
+
+// Define the Airport type based on the JSON structure
+interface Airport {
+  icao: string;
+  iata: string;
+  name: string;
+  city: string;
+  state: string;
+  country: string;
+  elevation: number;
+  lat: number;
+  lon: number;
+  tz: string;
+}
+
+const OPTIONS_LIMIT = 3;
+const filter = createFilterOptions<Airport>({
+  limit: OPTIONS_LIMIT,
+});
 
 interface Props {
   onSearch: (params: SearchParams) => void;
@@ -27,6 +51,14 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
     returnDate: "",
   });
 
+  // Memoize the list of airports to avoid re-calculating on every render
+  // Only include airports with an IATA code
+  const airports = useMemo(() => {
+    return Object.values(airportsData as Record<string, Airport>).filter(
+      (a) => a.iata && a.iata.length === 3,
+    );
+  }, []);
+
   const handleChange =
     (field: keyof SearchParams) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +69,14 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
       setForm({
         ...form,
         [field]: value,
+      });
+    };
+
+  const handleAirportChange =
+    (field: "origin" | "destination") => (_: any, newValue: Airport | null) => {
+      setForm({
+        ...form,
+        [field]: newValue ? newValue.iata : "",
       });
     };
 
@@ -76,14 +116,72 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
           gap: 1,
         }}
       >
-        <TextField
-          size={isMobile ? "small" : "medium"}
-          label="From"
-          value={form.origin}
-          onChange={handleChange("origin")}
-          placeholder="e.g. LOS"
-          inputProps={{ maxLength: 3 }}
+        <Autocomplete
           fullWidth
+          options={airports}
+          filterOptions={filter}
+          getOptionLabel={(option) =>
+            `${option.city} (${option.iata}) - ${option.name}`
+          }
+          value={airports.find((a) => a.iata === form.origin) || null}
+          onChange={handleAirportChange("origin")}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              size={isMobile ? "small" : "medium"}
+              label="Where from?"
+              placeholder="(LTN) London"
+            />
+          )}
+          renderOption={(props, option) => {
+            const { key, ...otherProps } = props;
+            return (
+              <Box component="li" key={key} {...otherProps}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 0,
+                    paddingY: 0,
+                  }}
+                >
+                  <Typography
+                    fontWeight={550}
+                    variant="body2"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Box
+                      component="span"
+                      mr={1}
+                      fontWeight={550}
+                      fontSize="1.1rem"
+                    >
+                      ({option.iata})
+                    </Box>
+                    <Box>{option.city}</Box>
+                  </Typography>
+                  <Typography color="text.secondary" variant="body2">
+                    {option.state + ", " + option.country}
+                  </Typography>
+                </Box>
+              </Box>
+            );
+          }}
+          PaperComponent={(props) => (
+            <Box
+              {...props}
+              sx={{
+                backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                boxShadow: theme.shadows[1],
+                borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
+
+                borderRadius: 2,
+              }}
+            />
+          )}
         />
 
         <Tooltip title="Swap origin and destination">
@@ -99,14 +197,58 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
           </IconButton>
         </Tooltip>
 
-        <TextField
-          size={isMobile ? "small" : "medium"}
-          label="To"
-          value={form.destination}
-          onChange={handleChange("destination")}
-          placeholder="e.g. JFK"
-          inputProps={{ maxLength: 3 }}
+        <Autocomplete
           fullWidth
+          options={airports}
+          filterOptions={filter}
+          getOptionLabel={(option) =>
+            `${option.city} (${option.iata}) - ${option.name}`
+          }
+          value={airports.find((a) => a.iata === form.destination) || null}
+          onChange={handleAirportChange("destination")}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              size={isMobile ? "small" : "medium"}
+              label="Where to?"
+              placeholder="(JFK) New York"
+            />
+          )}
+          renderOption={(props, option) => {
+            const { key, ...otherProps } = props;
+            return (
+              <Box component="li" key={key} {...otherProps}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 0,
+                    paddingY: 0,
+                  }}
+                >
+                  <Typography
+                    fontWeight={550}
+                    variant="body2"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Box
+                      component="span"
+                      mr={1}
+                      fontWeight={550}
+                      fontSize="1.1rem"
+                    >
+                      ({option.iata})
+                    </Box>
+                    <Box>{option.city}</Box>
+                  </Typography>
+                  <Typography color="text.secondary" variant="body2">
+                    {option.state + ", " + option.country}
+                  </Typography>
+                </Box>
+              </Box>
+            );
+          }}
         />
       </Box>
 

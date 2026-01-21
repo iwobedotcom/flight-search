@@ -15,6 +15,7 @@ import { useFlightFilters } from "../hooks/useFlightFilter";
 import { FlightFilters } from "../components/FlightFilters";
 import { FlightsChips } from "../components/FlightsChips";
 import LoadingSkeleton from "../components/LoadingSkeleton";
+import { FlightTable } from "../components/Flights/FlightTable";
 
 export default function Home() {
   const theme = useTheme();
@@ -83,8 +84,12 @@ export default function Home() {
             {/* Reset Button */}
             <Tooltip title="Reset">
               <Button
+                variant="text"
                 sx={{
                   color: theme.palette.primary.main,
+                  p: 0,
+                  right: 0,
+                  position: "absolute",
                 }}
                 onClick={() => setFilters({})}
               >
@@ -122,11 +127,13 @@ export default function Home() {
             borderRadius: 2,
           }}
         >
-          {isLoading ? <LoadingSkeleton variant="table" count={1} /> : <></>}
-          {/* <FlightGrid rows={filteredRows} loading={isLoading} /> */}
-
-          {/* <FlightTable rows={filteredRows} loading={isLoading} /> */}
-          {/* <FlightTable rows={dummyFlights} loading={isLoading} /> */}
+          {isLoading ? (
+            <LoadingSkeleton variant="table" count={1} />
+          ) : (
+            <>
+              <FlightTable rows={filteredRows} loading={isLoading} />
+            </>
+          )}
         </Grid>
       </Grid>
     </Container>

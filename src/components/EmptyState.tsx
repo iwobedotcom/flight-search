@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import InboxIcon from "@mui/icons-material/Inbox";
+import { FlightTakeoff } from "@mui/icons-material";
 
 export interface EmptyStateProps {
   icon?: ReactNode;
@@ -36,7 +36,7 @@ const EmptyState = ({
       }}
     >
       {icon || (
-        <InboxIcon
+        <FlightTakeoff
           sx={{
             fontSize: 64,
             color: "text.disabled",

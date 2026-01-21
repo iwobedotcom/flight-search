@@ -125,6 +125,11 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
           }
           value={airports.find((a) => a.iata === form.origin) || null}
           onChange={handleAirportChange("origin")}
+          slotProps={{
+            popupIndicator: {
+              sx: { display: "none" },
+            },
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -206,6 +211,11 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
           }
           value={airports.find((a) => a.iata === form.destination) || null}
           onChange={handleAirportChange("destination")}
+          slotProps={{
+            popupIndicator: {
+              sx: { display: "none" },
+            },
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -249,6 +259,20 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
               </Box>
             );
           }}
+          PaperComponent={(props) => (
+            <Box
+              {...props}
+              sx={{
+                backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                boxShadow: theme.shadows[1],
+                borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
+
+                borderRadius: 2,
+              }}
+            />
+          )}
         />
       </Box>
 

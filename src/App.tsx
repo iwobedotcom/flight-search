@@ -20,15 +20,23 @@ function App() {
     localStorage.setItem("themeMode", themeMode);
   }, [themeMode]);
 
+  const [systemMode, setSystemMode] = useState<"light" | "dark">(
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light",
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      setSystemMode(e.matches ? "dark" : "light");
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
   // Determine the actual theme mode
-  const actualMode = useMemo(() => {
-    if (themeMode === "system") {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-    }
-    return themeMode;
-  }, [themeMode]);
+  const actualMode = themeMode === "system" ? systemMode : themeMode;
 
   // Create theme based on mode
   const theme = useMemo(
@@ -97,7 +105,7 @@ function App() {
           primary: {
             main: "#564efd",
             light: "#b7b3ff",
-            dark: "##271bfe",
+            dark: "#271bfe",
             contrastText: "#ffffff",
           },
           secondary: {
@@ -127,13 +135,19 @@ function App() {
             dark: "#01579b",
           },
           background: {
-            default: "#f1f0f5",
-            paper: "#ffffff",
+            default: actualMode === "dark" ? "#121212" : "#f1f0f5",
+            paper: actualMode === "dark" ? "#1e1e1e" : "#ffffff",
           },
           text: {
-            primary: "rgba(0, 0, 0, 1)",
-            secondary: "rgba(0, 0, 0, 0.6)",
-            disabled: "rgba(0, 0, 0, 0.3)",
+            primary: actualMode === "dark" ? "#ffffff" : "rgba(0, 0, 0, 1)",
+            secondary:
+              actualMode === "dark"
+                ? "rgba(255, 255, 255, 0.7)"
+                : "rgba(0, 0, 0, 0.6)",
+            disabled:
+              actualMode === "dark"
+                ? "rgba(255, 255, 255, 0.5)"
+                : "rgba(0, 0, 0, 0.3)",
           },
         },
         shadows: [

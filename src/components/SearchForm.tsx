@@ -320,7 +320,7 @@ export default function SearchForm({
         disabled={isDisabled || isLoading}
         sx={{ height: { xs: "42px", md: "56px" } }}
       >
-        {isLoading ? "Searching..." : "Search Flights"}
+        Search Flights
       </Button>
     </Box>
   );

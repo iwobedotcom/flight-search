@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, useTheme } from "@mui/material";
 import { FlightTakeoff } from "@mui/icons-material";
 
 export interface EmptyStateProps {
@@ -23,6 +23,7 @@ const EmptyState = ({
   action,
   secondaryAction,
 }: EmptyStateProps) => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -33,6 +34,12 @@ const EmptyState = ({
         minHeight: 300,
         textAlign: "center",
         p: 3,
+        backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+        boxShadow: theme.shadows[1],
+        borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
+        borderRadius: 2,
       }}
     >
       {icon || (

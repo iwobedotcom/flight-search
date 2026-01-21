@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, useTheme } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 export interface ErrorStateProps {
@@ -18,6 +18,7 @@ const ErrorState = ({
   actionLabel,
   onAction,
 }: ErrorStateProps) => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -28,6 +29,12 @@ const ErrorState = ({
         minHeight: 300,
         textAlign: "center",
         p: 3,
+        backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+        boxShadow: theme.shadows[1],
+        borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
+        borderRadius: 2,
       }}
     >
       <ErrorOutlineIcon

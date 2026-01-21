@@ -11,6 +11,8 @@ import Header from "./components/Header";
 import { useTheme } from "./hooks/useTheme";
 import { createAppTheme } from "./theme/appTheme";
 
+import bgImage from "./assets/bg.jpg";
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -23,7 +25,7 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <CssBaseline />
           <Header themeMode={themeMode} onThemeModeChange={setThemeMode} />
-          <main style={{ backgroundImage: "url('/src/assets/bg.jpg')" }}>
+          <main style={{ backgroundImage: `url(${bgImage})` }}>
             <Container maxWidth="lg" sx={{ py: 10 }}>
               <Home />
             </Container>

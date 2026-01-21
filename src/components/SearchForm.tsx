@@ -7,7 +7,8 @@ import {
   TextField,
   IconButton,
   Tooltip,
-  CircularProgress,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { SwapHoriz } from "@mui/icons-material";
 
@@ -17,6 +18,8 @@ interface Props {
 }
 
 export default function SearchForm({ onSearch, isLoading }: Props) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [form, setForm] = useState<SearchParams>({
     origin: "",
     destination: "",
@@ -52,7 +55,11 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
   return (
     <Box
       sx={{
-        backgroundColor: "background.paper",
+        backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+        boxShadow: theme.shadows[1],
+        borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
         padding: 3,
         borderRadius: 2,
       }}
@@ -61,51 +68,65 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
       gap={2}
       alignItems="center"
     >
-      <TextField
-        label="From"
-        value={form.origin}
-        onChange={handleChange("origin")}
-        placeholder="e.g. LOS"
-        inputProps={{ maxLength: 3 }}
-        fullWidth
-      />
+      {/* FROM + SWAP + TO - only flex on mobile */}
+      <Box
+        sx={{
+          display: { xs: "flex", md: "contents" }, // flex only on mobile
+          alignItems: "center",
+          gap: 1,
+        }}
+      >
+        <TextField
+          size={isMobile ? "small" : "medium"}
+          label="From"
+          value={form.origin}
+          onChange={handleChange("origin")}
+          placeholder="e.g. LOS"
+          inputProps={{ maxLength: 3 }}
+          fullWidth
+        />
 
-      <Tooltip title="Swap origin and destination">
-        <IconButton
-          onClick={handleSwap}
-          disabled={!form.origin && !form.destination}
-          sx={{
-            alignSelf: "center",
-            mt: { xs: 0, md: 1 },
-            color: "primary.main",
-            "&:hover": {
-              backgroundColor: "action.hover",
-            },
-          }}
-        >
-          <SwapHoriz />
-        </IconButton>
-      </Tooltip>
+        <Tooltip title="Swap origin and destination">
+          <IconButton
+            onClick={handleSwap}
+            disabled={!form.origin && !form.destination}
+            sx={{
+              color: "primary.main",
+              "&:hover": { backgroundColor: "action.hover" },
+            }}
+          >
+            <SwapHoriz />
+          </IconButton>
+        </Tooltip>
+
+        <TextField
+          size={isMobile ? "small" : "medium"}
+          label="To"
+          value={form.destination}
+          onChange={handleChange("destination")}
+          placeholder="e.g. JFK"
+          inputProps={{ maxLength: 3 }}
+          fullWidth
+        />
+      </Box>
 
       <TextField
-        label="To"
-        value={form.destination}
-        onChange={handleChange("destination")}
-        placeholder="e.g. JFK"
-        inputProps={{ maxLength: 3 }}
-        fullWidth
-      />
-
-      <TextField
+        size={isMobile ? "small" : "medium"}
         label="Departure"
         InputLabelProps={{ shrink: true }}
         value={form.departureDate}
         onChange={handleChange("departureDate")}
         type="date"
         fullWidth
+        InputProps={{
+          sx: {
+            color: theme.palette.text.secondary,
+          },
+        }}
       />
 
       <TextField
+        size={isMobile ? "small" : "medium"}
         label="Return"
         InputLabelProps={{ shrink: true }}
         value={form.returnDate}
@@ -115,17 +136,20 @@ export default function SearchForm({ onSearch, isLoading }: Props) {
         disabled={!form.departureDate}
         inputProps={{
           min: dayjs(form.departureDate).format("YYYY-MM-DD"),
+          sx: {
+            color: theme.palette.text.secondary,
+          },
         }}
       />
 
       <Button
+        size={isMobile ? "small" : "medium"}
         variant="contained"
-        size="large"
         onClick={handleSubmit}
         disabled={isDisabled}
-        sx={{ height: "56px" }}
+        sx={{ height: { xs: "42px", md: "56px" } }}
       >
-        {isLoading ? <CircularProgress size={20} /> : "Search Flights"}
+        {isLoading ? "Searching..." : "Search Flights"}
       </Button>
     </Box>
   );

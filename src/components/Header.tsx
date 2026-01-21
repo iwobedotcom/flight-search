@@ -80,12 +80,12 @@ const Header: React.FC<HeaderProps> = ({ themeMode, onThemeModeChange }) => {
       color="default"
       elevation={1}
       sx={{
-        backgroundColor: theme.palette.background.default,
-        mb: 3,
+        backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 1)" : "rgba(255, 255, 255, 0.5)"}`,
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
         boxShadow: theme.shadows[1],
-        backdropFilter: "blur(5px)",
-        "-webkit-backdrop-filter": "blur(5px)",
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
+        mb: 3,
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
@@ -124,6 +124,15 @@ const Header: React.FC<HeaderProps> = ({ themeMode, onThemeModeChange }) => {
               horizontal: "right",
             }}
             sx={{ mt: 1 }}
+            PaperProps={{
+              sx: {
+                backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                boxShadow: theme.shadows[1],
+                borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
+              },
+            }}
           >
             <MenuItem
               onClick={() => handleThemeChange("system")}
@@ -199,6 +208,15 @@ const Header: React.FC<HeaderProps> = ({ themeMode, onThemeModeChange }) => {
               horizontal: "right",
             }}
             sx={{ mt: 1 }}
+            PaperProps={{
+              sx: {
+                backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                boxShadow: theme.shadows[1],
+                borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
+              },
+            }}
           >
             <Box
               sx={{

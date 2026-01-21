@@ -5,6 +5,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Container } from "@mui/material";
 import Home from "./pages/Home";
 import Header from "./components/Header";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const queryClient = new QueryClient();
 
@@ -91,7 +93,6 @@ function App() {
           },
           caption: {
             fontSize: "0.75rem",
-            lineHeight: 1.5,
           },
           overline: {
             fontSize: "0.75rem",
@@ -207,11 +208,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Header themeMode={themeMode} onThemeModeChange={setThemeMode} />
-        <Container maxWidth="lg" sx={{ py: 10 }}>
-          <Home />
-        </Container>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <CssBaseline />
+          <Header themeMode={themeMode} onThemeModeChange={setThemeMode} />
+          <main style={{ backgroundImage: "url('/src/assets/bg.jpg')" }}>
+            <Container maxWidth="lg" sx={{ py: 10 }}>
+              <Home />
+            </Container>
+          </main>
+        </LocalizationProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

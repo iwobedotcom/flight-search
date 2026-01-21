@@ -13,7 +13,6 @@ export function transformFlightOffers(
 
     const airlineCode = firstSegment.carrierCode;
 
-    // ✅ STEP 1: Extract cabin classes properly
     const cabins = new Set<string>();
 
     offer.travelerPricings?.forEach((tp: any) => {
@@ -29,7 +28,6 @@ export function transformFlightOffers(
 
       airlineCode,
       airlineName: dictionaries.carriers?.[airlineCode] ?? airlineCode,
-
       flightNumber: `${airlineCode}${firstSegment.number}`,
 
       origin: firstSegment.departure.iataCode,
@@ -44,8 +42,18 @@ export function transformFlightOffers(
       price: Number(offer.price.grandTotal),
       currency: offer.price.currency,
 
-      // ✅ STEP 2: Normalize to array
       cabinClasses: Array.from(cabins),
+
+      oneWay: offer.oneWay,
+      bookableSeats: offer.numberOfBookableSeats,
+
+      checkedBags:
+        offer.travelerPricings?.[0]?.fareDetailsBySegment?.[0]
+          ?.includedCheckedBags?.quantity ?? 0,
+
+      cabinBags:
+        offer.travelerPricings?.[0]?.fareDetailsBySegment?.[0]
+          ?.includedCabinBags?.quantity ?? 0,
     };
   });
 }

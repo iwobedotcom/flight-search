@@ -3,8 +3,6 @@ export interface FlightRow {
 
   airlineCode: string;
   airlineName: string;
-  cabinClasses: string[];
-
   flightNumber: string;
 
   origin: string;
@@ -18,4 +16,12 @@ export interface FlightRow {
 
   price: number;
   currency: string;
+
+  cabinClasses: string[];
+
+  oneWay: boolean;
+  bookableSeats: number;
+
+  checkedBags: number;
+  cabinBags: number;
 }

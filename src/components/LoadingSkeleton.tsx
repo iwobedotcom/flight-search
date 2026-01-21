@@ -36,7 +36,7 @@ const LoadingSkeleton = ({
 
   const renderTableSkeleton = () => (
     <Box sx={{ mb: 1 }}>
-      <Skeleton variant="rectangular" height={48} sx={{ borderRadius: 1 }} />
+      <Skeleton variant="rectangular" height={500} sx={{ borderRadius: 1 }} />
     </Box>
   );
 

@@ -4,6 +4,8 @@ export function transformFlightOffers(
   offers: any[],
   dictionaries: any,
 ): FlightRow[] {
+  if (!offers || !Array.isArray(offers)) return [];
+
   return offers.map((offer) => {
     const itinerary = offer.itineraries[0];
     const segments = itinerary.segments;
@@ -27,7 +29,7 @@ export function transformFlightOffers(
       id: offer.id,
 
       airlineCode,
-      airlineName: dictionaries.carriers?.[airlineCode] ?? airlineCode,
+      airlineName: dictionaries?.carriers?.[airlineCode] ?? airlineCode,
       flightNumber: `${airlineCode}${firstSegment.number}`,
 
       origin: firstSegment.departure.iataCode,

@@ -7,6 +7,7 @@ import {
   Avatar,
   Box,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { useState } from "react";
@@ -18,13 +19,18 @@ interface Props {
 }
 
 export function FlightTableRow({ row }: Props) {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <TableRow hover>
         <TableCell>
-          <IconButton size="small" onClick={() => setOpen(!open)}>
+          <IconButton
+            sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)" }}
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>
@@ -36,30 +42,44 @@ export function FlightTableRow({ row }: Props) {
               alt={row.airlineName}
             />
             <Box>
-              <Typography fontWeight={600}>{row.airlineName}</Typography>
+              <Typography variant="body2" lineHeight={0.7} fontWeight={600}>
+                {row.airlineName}
+              </Typography>
               <Typography variant="caption">{row.flightNumber}</Typography>
             </Box>
           </Box>
         </TableCell>
 
         <TableCell>
-          {row.origin} → {row.destination}
+          <Typography variant="caption" lineHeight={0.7}>
+            {row.origin} → {row.destination}
+          </Typography>
         </TableCell>
 
         <TableCell>
-          {new Date(row.departureTime).toLocaleTimeString()}
+          <Typography variant="caption" lineHeight={0.7}>
+            {new Date(row.departureTime).toLocaleTimeString()}
+          </Typography>
         </TableCell>
 
         <TableCell>
           <Chip
-            label={row.stops === 0 ? "Non-stop" : `${row.stops} stop(s)`}
-            color={row.stops === 0 ? "success" : "warning"}
+            label={row.stops === 0 ? "Non-stop" : `${row.stops} Stop(s)`}
+            sx={{
+              backgroundColor: theme.palette.primary.light,
+              color: theme.palette.primary.dark,
+              border: `1px solid #b7b3fe`,
+              fontSize: "0.75rem",
+              p: 0.5,
+            }}
             size="small"
           />
         </TableCell>
 
         <TableCell align="right">
-          {row.currency} {row.price.toLocaleString()}
+          <Typography variant="caption" lineHeight={0.7}>
+            {row.currency} {row.price.toLocaleString()}
+          </Typography>
         </TableCell>
       </TableRow>
 

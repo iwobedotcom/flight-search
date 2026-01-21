@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { SearchParams } from "../types/search";
 import {
   Box,
@@ -17,19 +17,7 @@ import { SwapHoriz } from "@mui/icons-material";
 import airportsData from "../data/airports.json";
 import { useMemo } from "react";
 
-// Define the Airport type based on the JSON structure
-interface Airport {
-  icao: string;
-  iata: string;
-  name: string;
-  city: string;
-  state: string;
-  country: string;
-  elevation: number;
-  lat: number;
-  lon: number;
-  tz: string;
-}
+import type { Airport } from "../types/airport";
 
 const OPTIONS_LIMIT = 3;
 const filter = createFilterOptions<Airport>({
@@ -39,17 +27,34 @@ const filter = createFilterOptions<Airport>({
 interface Props {
   onSearch: (params: SearchParams) => void;
   isLoading: boolean;
+  initialParams?: SearchParams | null;
 }
 
-export default function SearchForm({ onSearch, isLoading }: Props) {
+export default function SearchForm({
+  onSearch,
+  isLoading,
+  initialParams,
+}: Props) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [form, setForm] = useState<SearchParams>({
-    origin: "",
-    destination: "",
-    departureDate: "",
-    returnDate: "",
+    origin: initialParams?.origin || "",
+    destination: initialParams?.destination || "",
+    departureDate: initialParams?.departureDate || "",
+    returnDate: initialParams?.returnDate || "",
   });
+
+  // Sync form with initialParams when they change
+  useEffect(() => {
+    if (initialParams) {
+      setForm({
+        origin: initialParams.origin || "",
+        destination: initialParams.destination || "",
+        departureDate: initialParams.departureDate || "",
+        returnDate: initialParams.returnDate || "",
+      });
+    }
+  }, [initialParams]);
 
   // Memoize the list of airports to avoid re-calculating on every render
   // Only include airports with an IATA code

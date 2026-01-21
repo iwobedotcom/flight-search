@@ -22,9 +22,18 @@ import EmptyState from "../components/EmptyState";
 
 export default function Home() {
   const theme = useTheme();
-  const [searchParams, setSearchParams] = useState<SearchParams | null>(() =>
-    loadWithTTL<SearchParams>("flight-search"),
-  );
+  // Default search parameters to ensure users see data on first visit
+  const defaultSearchParams: SearchParams = {
+    origin: "LHR",
+    destination: "JFK",
+    departureDate: "2026-02-01",
+    returnDate: "",
+  };
+
+  const [searchParams, setSearchParams] = useState<SearchParams | null>(() => {
+    const stored = loadWithTTL<SearchParams>("flight-search");
+    return stored || defaultSearchParams;
+  });
 
   const storedFlights = loadWithTTL<any[]>("flight-results");
   const {
@@ -89,7 +98,11 @@ export default function Home() {
   return (
     <Container maxWidth="xl">
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }} my={4}>
-        <SearchForm onSearch={setSearchParams} isLoading={isLoading} />
+        <SearchForm
+          onSearch={setSearchParams}
+          isLoading={isLoading}
+          initialParams={searchParams}
+        />
 
         {cheapestFlights.length > 0 && (
           <FlightsChips flights={cheapestFlights} />
@@ -107,6 +120,7 @@ export default function Home() {
             borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
             p: 2,
             borderRadius: 2,
+            height: "fit-content",
           }}
         >
           <Box
@@ -141,7 +155,6 @@ export default function Home() {
               </Button>
             </Tooltip>
           </Box>
-          {/* <PriceGraph rows={filteredRows} /> */}
 
           <FlightFilters
             maxPrice={filters.maxPrice ?? 10000}
@@ -161,15 +174,14 @@ export default function Home() {
 
         <Grid
           size={{ xs: 12, md: 9 }}
-          sx={{
-            backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
-            boxShadow: theme.shadows[1],
-            borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
-            p: 2,
-            borderRadius: 2,
-          }}
+          // sx={{
+          //   backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
+          //   backdropFilter: "blur(10px)",
+          //   WebkitBackdropFilter: "blur(10px)",
+          //   boxShadow: theme.shadows[1],
+          //   borderBottom: `1px solid rgba(255, 255, 255, 0.3)`,
+          //   borderRadius: 2,
+          // }}
         >
           {isLoading && <LoadingSkeleton variant="table" count={1} />}
 

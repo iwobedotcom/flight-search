@@ -12,9 +12,5 @@
       "source": "/api/test-auth",
       "destination": "/api/test-auth.ts"
     }
-  ],
-  "env": {
-    "AMADEUS_CLIENT_ID": "@amadeus_client_id",
-    "AMADEUS_CLIENT_SECRET": "@amadeus_client_secret"
-  }
+  ]
 }

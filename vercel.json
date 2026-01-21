@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/flights",
+      "destination": "/api/flights.ts"
+    },
+    {
+      "source": "/api/test-auth",
+      "destination": "/api/test-auth.ts"
+    }
+  ],
+  "env": {
+    "AMADEUS_CLIENT_ID": "@amadeus_client_id",
+    "AMADEUS_CLIENT_SECRET": "@amadeus_client_secret"
+  }
+}

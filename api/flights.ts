@@ -44,7 +44,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const token = await getAccessToken();
 
     const response = await axios.get(
-      "https://test.api.amadeus.com/v1/shopping/flight-offers",
+      "https://test.api.amadeus.com/v2/shopping/flight-offers",
       {
         headers: {
           Authorization: `Bearer ${token}`,

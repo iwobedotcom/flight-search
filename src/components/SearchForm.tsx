@@ -100,6 +100,8 @@ export default function SearchForm({
   return (
     <Box
       sx={{
+        minWidth: 0, // 👈 VERY IMPORTANT
+
         backgroundColor: `${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.5)"}`,
         backdropFilter: "blur(10px)",
         WebkitBackdropFilter: "blur(10px)",
@@ -119,6 +121,9 @@ export default function SearchForm({
           display: { xs: "flex", md: "contents" },
           alignItems: "center",
           gap: 1,
+          width: "100%",
+          minWidth: 0, // 👈 key
+          flexWrap: "wrap", // 👈 prevents horizontal overflow
         }}
       >
         <Autocomplete
